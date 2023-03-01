@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import publicConfig from "../publicConfig";
 import * as fcl from "@onflow/fcl";
 import { outdatedPathsMainnet } from "./mainnet_outdated_paths";
@@ -182,22 +182,30 @@ function VerifyNft(props) {
     return paths;
   };
 
-  const verifyNft = async (items, contractAddress) => {
+  const [ans, setAns] = useState();
+  const verifyNft = (items, contractAddress) => {
     let arr = [];
-    items.then((items) => {
-      for (let key in items) {
-        if (items[key]["tokenIDs"].length > 0) {
-          arr.push(items[key]["type"]["typeID"].split(".Collection")[0]);
-        }
+    for (let key in items) {
+      if (items[key]["tokenIDs"].length > 0) {
+        arr.push(items[key]["type"]["typeID"].split(".Collection")[0]);
       }
-      let temp = arr.includes(contractAddress);
-      console.log(temp);
-    });
+    }
+    let temp = arr.includes(contractAddress);
+    setAns(temp);
   };
-  let items = bulkGetStoredItems(props.userWalletAddress);
-  verifyNft(items, props.contractAddress);
+  bulkGetStoredItems(props.userWalletAddress).then((items) => {
+    verifyNft(items, props.contractAddress);
+  });
 
-  return <></>;
+  return (
+    <>
+      {ans !== undefined
+        ? ans === true
+          ? "Status: Approved, Eligible tokens found! 👍🏻"
+          : "Status: Rejected, No eligible tokens found! ❗"
+        : "Status: Loading"}
+    </>
+  );
 }
 
 export default VerifyNft;
