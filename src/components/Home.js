@@ -48,7 +48,7 @@ function Home() {
           color="text.secondary"
           component="p"
         >
-          Accese events and meetups with NFTs as your tickets. No wallet connect
+          Access events and meetups with NFTs as your tickets. No wallet connect
           required!
         </Typography>
       </Container>
